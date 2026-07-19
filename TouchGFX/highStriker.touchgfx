@@ -1,0 +1,292 @@
+{
+  "Application": {
+    "Screens": [
+      {
+        "Name": "Screen1",
+        "Components": [
+          {
+            "Type": "Image",
+            "Name": "start3",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "start3.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "start2",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "start2.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "start1",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "start1.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "start0",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "start0.png"
+          },
+          {
+            "Type": "Button",
+            "Name": "button1",
+            "Y": 239,
+            "Width": 240,
+            "Height": 50,
+            "Pressed": "__generated\\alternate_theme_images_widgets_button_regular_height_50_medium_rounded_pressed.png",
+            "Released": "__generated\\alternate_theme_images_widgets_button_regular_height_50_medium_rounded_normal.png",
+            "Alpha": 0,
+            "Preset": "alternate_theme\\presets\\button\\regular\\height_50\\medium_rounded_normal.json"
+          },
+          {
+            "Type": "TextArea",
+            "Name": "BestScore",
+            "X": 120,
+            "Y": 181,
+            "Width": 10,
+            "Height": 16,
+            "TextId": "__SingleUse_EK86",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 191,
+              "Green": 31,
+              "Blue": 31
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_UJHL",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Interaction1",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "button1"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "North",
+              "ActionComponent": "Screen2"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "Screen2",
+        "Components": [
+          {
+            "Type": "Image",
+            "Name": "game10",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game10.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game9",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game9.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game8",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game8.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game7",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game7.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game6",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game6.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game5",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game5.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game4",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game4.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game3",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game3.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game2",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game2.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game1",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game1.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game0",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "game0.png"
+          },
+          {
+            "Type": "Button",
+            "Name": "button1",
+            "X": 7,
+            "Y": 277,
+            "Width": 30,
+            "Height": 29,
+            "Pressed": "Blue_Icons_Home_32.png",
+            "Released": "Blue_Icons_Home_32.png"
+          },
+          {
+            "Type": "TextArea",
+            "Name": "Score",
+            "X": 56,
+            "Y": 172,
+            "Width": 10,
+            "Height": 16,
+            "TextId": "__SingleUse_KDJY",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 191,
+              "Green": 31,
+              "Blue": 31
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_S5RV"
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "HighScore",
+            "X": 187,
+            "Y": 172,
+            "Width": 10,
+            "Height": 16,
+            "TextId": "__SingleUse_RGYX",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 191,
+              "Green": 31,
+              "Blue": 31
+            },
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_6JBA",
+              "UseBuffer": true,
+              "BufferSize": 10
+            }
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Interaction1",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "button1"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionWipe",
+              "ScreenTransitionDirection": "South",
+              "ActionComponent": "Screen1"
+            }
+          }
+        ]
+      }
+    ],
+    "CustomContainerDefinitions": [],
+    "Name": "highStriker",
+    "Resolution": {
+      "Width": 240,
+      "Height": 320
+    },
+    "SelectedColorDepth": 16,
+    "StartupScreenName": "Screen1",
+    "SelectedStartupLanguage": "GB",
+    "TouchGfxPath": "../Middlewares/ST/touchgfx",
+    "UIPath": ".",
+    "AvailableColorDepths": [
+      16
+    ],
+    "AvailableLCDs": {
+      "16": "LCD16bpp"
+    },
+    "AvailableSections": [
+      "ExtFlashSection",
+      "IntFlashSection"
+    ],
+    "AvailableResolutions": [
+      {
+        "Width": 240,
+        "Height": 320
+      }
+    ],
+    "PhysicalButtons": [],
+    "FrameworkFeatures": {
+      "LCD16bpp": {
+        "Id": "LCD16bpp",
+        "IsEnabled": true
+      }
+    },
+    "GenerateAssetsCommand": "make -f simulator/gcc/Makefile assets -j8",
+    "PostGenerateCommand": "touchgfx update_project --project-file=simulator/msvs/Application.vcxproj",
+    "PostGenerateTargetCommand": "touchgfx update_project",
+    "CompileSimulatorCommand": "make -f simulator/gcc/Makefile -j8",
+    "RunSimulatorCommand": "build\\bin\\simulator.exe",
+    "CompileTargetCommandOverride": "make -f ../gcc/Makefile -j8",
+    "FlashTargetCommandOverride": "make -f ../gcc/Makefile flash",
+    "LandscapeSkinX": 0,
+    "LandscapeSkinY": 0,
+    "PortraitSkinX": 0,
+    "PortraitSkinY": 0,
+    "DisplayOrientation": "Portrait",
+    "Family": "STM32F4",
+    "SubFamily": "STM32F429/439",
+    "Toolchain": "STM32CubeIDE",
+    "Platform": "m4",
+    "ProjectFile": "../STM32F429I_DISCO_REV_D01.ioc",
+    "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
+    "OptionalComponents": [],
+    "AdditionalFeatures": [
+      "CWRVector",
+      "VectorFonts"
+    ]
+  },
+  "Version": "4.26.1",
+  "CreatedBy": "4.26.1"
+}
