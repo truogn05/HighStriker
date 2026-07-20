@@ -17,11 +17,12 @@ public:
 
 protected:
     static const uint8_t NUM_START_FRAMES = 4;   // start0..start3
-    static const uint8_t TICKS_PER_FRAME  = 20;   // 60Hz tick / 10fps
+    static const uint8_t TICKS_PER_FRAME  = 20;  // 60Hz tick / 3fps
 
     touchgfx::Image* startFrames[NUM_START_FRAMES];
-    uint8_t currentFrame;
-    uint8_t tickCounter;
+    uint8_t  currentFrame;
+    uint8_t  tickCounter;
+    uint16_t lastHighScore;
 
     void showFrame(uint8_t index);
     void updateBestScoreText(uint16_t highScorePercent);

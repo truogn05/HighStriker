@@ -1,7 +1,7 @@
 #include <gui/screen1_screen/Screen1View.hpp>
 
 Screen1View::Screen1View()
-    : currentFrame(0), tickCounter(0)
+    : currentFrame(0), tickCounter(0), lastHighScore(0xFFFF)
 {
     startFrames[0] = &start0;
     startFrames[1] = &start1;
@@ -15,6 +15,8 @@ void Screen1View::setupScreen()
 
     currentFrame = 0;
     tickCounter = 0;
+    lastHighScore = 0xFFFF; // Force initial text update
+
     showFrame(currentFrame);
 
     ScoreDisplayData_t data;
@@ -29,7 +31,11 @@ void Screen1View::tearDownScreen()
 
 void Screen1View::onScoreUpdated(const ScoreDisplayData_t& data)
 {
-    updateBestScoreText(data.highScorePercent);
+    // Only update BestScore text if the value actually changes
+    if (data.highScorePercent != lastHighScore)
+    {
+        updateBestScoreText(data.highScorePercent);
+    }
 }
 
 void Screen1View::handleTickEvent()
@@ -50,12 +56,14 @@ void Screen1View::showFrame(uint8_t index)
     for (uint8_t i = 0; i < NUM_START_FRAMES; i++)
     {
         startFrames[i]->setVisible(i == index);
-        startFrames[i]->invalidate();
     }
+    // Invalidate active container once to prevent Z-order redraw flickering
+    invalidate();
 }
 
 void Screen1View::updateBestScoreText(uint16_t highScorePercent)
 {
+    lastHighScore = highScorePercent;
     BestScore.invalidate();
     touchgfx::Unicode::snprintf(BestScoreBuffer, BESTSCORE_SIZE, "%d%%", highScorePercent);
     BestScore.resizeToCurrentText();

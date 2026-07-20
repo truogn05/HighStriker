@@ -9,14 +9,19 @@ extern "C" {
 
 // Thresholds for High Striker hit detection
 #ifndef FORCE_TRIGGER_THRESHOLD
-#define FORCE_TRIGGER_THRESHOLD   5000    // Minimum force units to trigger a hit (ignores light taps)
+#define FORCE_TRIGGER_THRESHOLD   5000    // Minimum force units to trigger a hit
+#endif
+
+#ifndef IMPULSE_MIN_DELTA
+#define IMPULSE_MIN_DELTA         2500    // Fast force rise required (dF/dt) to reject static pressing
 #endif
 
 #ifndef FORCE_MAX_THRESHOLD
 #define FORCE_MAX_THRESHOLD       250000  // Force units corresponding to 100% (Level 10)
 #endif
 
-#define PEAK_TIMEOUT_MS           600     // Sampling window in ms to capture peak force
+#define PEAK_TIMEOUT_MS           200     // 200ms impact window to capture maximum strike peak
+#define POST_HIT_LOCKOUT_MS       1000    // 1 second cooldown between consecutive strikes
 
 typedef struct {
     HX711_t hx;
@@ -27,6 +32,8 @@ typedef struct {
     uint8_t  is_measuring;
     uint32_t start_time;
     int32_t  current_peak;
+    int32_t  prev_force;
+    uint32_t last_hit_time;
 } LoadCell_t;
 
 void LoadCell_Init(LoadCell_t *lc, GPIO_TypeDef* clk_port, uint16_t clk_pin, GPIO_TypeDef* dout_port, uint16_t dout_pin);
