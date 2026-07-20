@@ -16,11 +16,20 @@ void Screen1View::setupScreen()
     currentFrame = 0;
     tickCounter = 0;
     showFrame(currentFrame);
+
+    ScoreDisplayData_t data;
+    Score_GetDisplayData(&data);
+    updateBestScoreText(data.highScorePercent);
 }
 
 void Screen1View::tearDownScreen()
 {
     Screen1ViewBase::tearDownScreen();
+}
+
+void Screen1View::onScoreUpdated(const ScoreDisplayData_t& data)
+{
+    updateBestScoreText(data.highScorePercent);
 }
 
 void Screen1View::handleTickEvent()
@@ -43,4 +52,12 @@ void Screen1View::showFrame(uint8_t index)
         startFrames[i]->setVisible(i == index);
         startFrames[i]->invalidate();
     }
+}
+
+void Screen1View::updateBestScoreText(uint16_t highScorePercent)
+{
+    BestScore.invalidate();
+    touchgfx::Unicode::snprintf(BestScoreBuffer, BESTSCORE_SIZE, "%d%%", highScorePercent);
+    BestScore.resizeToCurrentText();
+    BestScore.invalidate();
 }

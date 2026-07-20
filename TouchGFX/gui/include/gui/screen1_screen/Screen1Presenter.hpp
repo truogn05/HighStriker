@@ -25,6 +25,8 @@ public:
      */
     virtual void deactivate();
 
+    virtual void onScoreUpdated(const ScoreDisplayData_t& data) override;
+
     virtual ~Screen1Presenter() {}
 
 private:

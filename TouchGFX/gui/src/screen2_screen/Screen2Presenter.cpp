@@ -16,3 +16,8 @@ void Screen2Presenter::deactivate()
 {
 
 }
+
+void Screen2Presenter::onScoreUpdated(const ScoreDisplayData_t& data)
+{
+    view.onScoreUpdated(data);
+}

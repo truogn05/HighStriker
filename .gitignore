@@ -37,3 +37,7 @@ MDK-ARM/*vguix.*
 
 # CMake
 build/*
+
+#temp
+/TODO.md
+/temp/

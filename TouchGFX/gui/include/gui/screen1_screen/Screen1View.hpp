@@ -3,6 +3,7 @@
 
 #include <gui_generated/screen1_screen/Screen1ViewBase.hpp>
 #include <gui/screen1_screen/Screen1Presenter.hpp>
+#include "score_interface.h"
 
 class Screen1View : public Screen1ViewBase
 {
@@ -12,6 +13,7 @@ public:
     virtual void setupScreen();
     virtual void tearDownScreen();
     virtual void handleTickEvent();
+    void onScoreUpdated(const ScoreDisplayData_t& data);
 
 protected:
     static const uint8_t NUM_START_FRAMES = 4;   // start0..start3
@@ -22,6 +24,7 @@ protected:
     uint8_t tickCounter;
 
     void showFrame(uint8_t index);
+    void updateBestScoreText(uint16_t highScorePercent);
 };
 
 #endif // SCREEN1VIEW_HPP

@@ -25,6 +25,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "Components/ili9341/ili9341.h"
+#include "load_cell.h"
+#include "score_interface.h"
+#include "flash_storage.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -90,6 +93,7 @@ const osThreadAttr_t GUI_Task_attributes = {
 };
 /* USER CODE BEGIN PV */
 uint8_t isRevD = 0; /* Applicable only for STM32F429I DISCOVERY REVD and above */
+static LoadCell_t g_loadCell;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -967,10 +971,32 @@ void LCD_Delay(uint32_t Delay)
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
+  uint16_t savedHighScore = Flash_ReadHighScore();
+  Score_Init(savedHighScore);
+
+  // Initialize HX711 on PD12 (SCK) and PB12 (DOUT)
+  LoadCell_Init(&g_loadCell, GPIOD, GPIO_PIN_12, GPIOB, GPIO_PIN_12);
+  LoadCell_Tare(&g_loadCell, 10);
+
+  int32_t peakForce = 0;
+
   /* Infinite loop */
   for(;;)
   {
-    osDelay(100);
+    if (LoadCell_Process(&g_loadCell, &peakForce)) {
+      uint16_t percent = Force_To_Percent(peakForce);
+      uint8_t  level   = Percent_To_Level(percent);
+
+      Score_SetNewHit(level, percent);
+
+      // Check and update persistent High Score in Flash
+      if (percent > savedHighScore) {
+        savedHighScore = percent;
+        Flash_SaveHighScore(savedHighScore);
+      }
+    }
+
+    osDelay(10);
   }
   /* USER CODE END 5 */
 }
