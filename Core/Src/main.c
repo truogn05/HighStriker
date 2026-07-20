@@ -983,16 +983,34 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    if (LoadCell_Process(&g_loadCell, &peakForce)) {
-      uint16_t percent = Force_To_Percent(peakForce);
-      uint8_t  level   = Percent_To_Level(percent);
+    // ONLY process loadcell force measurements when game is active on Screen2 (STATE_IDLE)
+    if (Score_IsGameActive()) {
+      if (LoadCell_Process(&g_loadCell, &peakForce)) {
+        uint16_t percent = Force_To_Percent(peakForce);
+        uint8_t  level   = Percent_To_Level(percent);
 
-      Score_SetNewHit(level, percent);
+        Score_SetNewHit(level, percent);
 
-      // Check and update persistent High Score in Flash
-      if (percent > savedHighScore) {
-        savedHighScore = percent;
-        Flash_SaveHighScore(savedHighScore);
+        // Check and update persistent High Score in Flash
+        if (percent > savedHighScore) {
+          savedHighScore = percent;
+          Flash_SaveHighScore(savedHighScore);
+        }
+      }
+    } else {
+      // Reset loadcell measuring state when on Screen1 or during Screen2 Intro
+      g_loadCell.is_measuring = 0;
+    }
+
+    // Check Blue USER Button (PA0) on STM32F429I-DISCO for High Score Reset
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
+      osDelay(50); // Debounce delay
+      if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
+        savedHighScore = 0;
+        Score_ResetHighScore();
+        while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
+          osDelay(10); // Wait until released
+        }
       }
     }
 

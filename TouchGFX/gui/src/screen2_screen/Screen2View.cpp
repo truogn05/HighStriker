@@ -22,7 +22,9 @@ void Screen2View::setupScreen()
 
     Score.setWildcard(scoreBuffer);
 
-    // Reset intro animation (0->10->0 lặp 2 lần) khi vào Screen2
+    // Tắt nhận tín hiệu đo lực trong khi Intro đang chạy
+    Score_SetGameActive(0);
+
     state = STATE_INTRO_ANIMATION;
     stepIndex = 0;
     tickCounter = 0;
@@ -41,6 +43,8 @@ void Screen2View::setupScreen()
 
 void Screen2View::tearDownScreen()
 {
+    // Tắt nhận tín hiệu cảm biến khi rời khỏi Screen2
+    Score_SetGameActive(0);
     Screen2ViewBase::tearDownScreen();
 }
 
@@ -87,6 +91,9 @@ void Screen2View::handleTickEvent()
                 currentLevel = 0;
                 showFrame(0);
                 updateScoreText(0);
+
+                // CHỈ kích hoạt nhận tín hiệu cảm biến KHI INTRO ĐÃ CHẠY XONG!
+                Score_SetGameActive(1);
             }
             else
             {
@@ -171,16 +178,14 @@ void Screen2View::showFrame(uint8_t index)
 
 void Screen2View::updateScoreText(uint16_t percent)
 {
-    Score.invalidate(); // Invalidate old area before resize
+    Score.invalidate(); // Invalidate old area
     touchgfx::Unicode::snprintf(scoreBuffer, SCORE_BUFFER_SIZE, "%d%%", percent);
-    Score.resizeToCurrentText();
-    Score.invalidate(); // Invalidate new area after resize
+    Score.invalidate(); // Keep fixed width & alignment intact (do not call resizeToCurrentText)
 }
 
 void Screen2View::updateHighScoreText(uint16_t highScorePercent)
 {
-    HighScore.invalidate(); // Invalidate old area before resize
+    HighScore.invalidate(); // Invalidate old area
     touchgfx::Unicode::snprintf(HighScoreBuffer, HIGHSCORE_SIZE, "%d%%", highScorePercent);
-    HighScore.resizeToCurrentText();
-    HighScore.invalidate(); // Invalidate new area after resize
+    HighScore.invalidate(); // Keep fixed width & alignment intact (do not call resizeToCurrentText)
 }

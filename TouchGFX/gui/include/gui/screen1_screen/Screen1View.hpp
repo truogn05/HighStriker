@@ -22,10 +22,8 @@ protected:
     touchgfx::Image* startFrames[NUM_START_FRAMES];
     uint8_t  currentFrame;
     uint8_t  tickCounter;
-    uint16_t lastHighScore;
 
     void showFrame(uint8_t index);
-    void updateBestScoreText(uint16_t highScorePercent);
 };
 
 #endif // SCREEN1VIEW_HPP
