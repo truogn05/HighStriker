@@ -5,6 +5,7 @@
 
 Screen2View::Screen2View()
     : state(STATE_INTRO_ANIMATION),
+      activeStatusText(STATUS_NONE),
       stepIndex(0),
       currentLevel(0),
       targetLevel(0),
@@ -69,11 +70,10 @@ void Screen2View::setupScreen()
     showGameFrame(frameForStep(stepIndex));
     updateScoreText(0);
 
-    // Ban dau hide ca 2 o text (text va text2) trong luc Intro chay
+    // Ban dau hide text2 va tat ca cac o text thong bao tinh bên phai
     text2.setVisible(false);
     text2.invalidate();
-    text.setVisible(false);
-    text.invalidate();
+    hideAllStatusTexts();
 
     ScoreDisplayData_t data;
     Score_GetDisplayData(&data);
@@ -95,8 +95,8 @@ void Screen2View::onScoreUpdated(const ScoreDisplayData_t& data)
         Score_ClearResetScoreFlag();
         updateScoreText(0);
 
-        // Chi xu ly bat dau luong xac nhan khi dang o cac trang thai cho xac nhan hoac da hoan thanh luot choi
-        if (state == STATE_WAIT_CONFIRM || state == STATE_GO_IDLE || state == STATE_RESULT_DISPLAY)
+        // Chi xu ly bat dau luong xac nhan (OK -> Ready... -> Go!) khi dang o STATE_WAIT_CONFIRM hoac STATE_RESULT_DISPLAY
+        if (state == STATE_WAIT_CONFIRM || state == STATE_RESULT_DISPLAY)
         {
             startConfirmationFlow();
         }
@@ -154,18 +154,65 @@ void Screen2View::updateAlphaPulse()
     }
     alphaVal = static_cast<uint8_t>(nextAlpha);
 
-    // Bat nhay Alpha cho o text2 ("Are U Ready") neu dang o STATE_WAIT_CONFIRM
-    if (state == STATE_WAIT_CONFIRM && text2.isVisible())
+    // Bat nhay Alpha cho o text2 ("Are U Ready") khi text2 hien thi
+    if (text2.isVisible())
     {
         text2.setAlpha(alphaVal);
         text2.invalidate();
     }
 
-    // Bat nhay Alpha cho o text ("Bad"/"Great!"/"Excellent!") neu dang o STATE_RESULT_DISPLAY
-    if (state == STATE_RESULT_DISPLAY && text.isVisible())
+    // Bat nhay Alpha cho o text thong bao danh hieu dang active o STATE_RESULT_DISPLAY
+    if (state == STATE_RESULT_DISPLAY)
     {
-        text.setAlpha(alphaVal);
-        text.invalidate();
+        touchgfx::TextArea* target = nullptr;
+        if (activeStatusText == STATUS_BAD) target = &txtBad;
+        else if (activeStatusText == STATUS_GREAT) target = &txtGreat;
+        else if (activeStatusText == STATUS_EXCELLENT) target = &txtExcellent;
+
+        if (target && target->isVisible())
+        {
+            target->setAlpha(alphaVal);
+            target->invalidate();
+        }
+    }
+}
+
+void Screen2View::hideAllStatusTexts()
+{
+    txtOK.setVisible(false);        txtOK.invalidate();
+    txtReady.setVisible(false);     txtReady.invalidate();
+    txtGo.setVisible(false);        txtGo.invalidate();
+    txtBad.setVisible(false);       txtBad.invalidate();
+    txtGreat.setVisible(false);     txtGreat.invalidate();
+    txtExcellent.setVisible(false); txtExcellent.invalidate();
+    activeStatusText = STATUS_NONE;
+}
+
+void Screen2View::showStatusText(StatusTextType type, bool pulseAlpha)
+{
+    hideAllStatusTexts();
+    activeStatusText = type;
+
+    touchgfx::TextArea* target = nullptr;
+    switch (type)
+    {
+    case STATUS_OK:        target = &txtOK; break;
+    case STATUS_READY:     target = &txtReady; break;
+    case STATUS_GO:        target = &txtGo; break;
+    case STATUS_BAD:       target = &txtBad; break;
+    case STATUS_GREAT:     target = &txtGreat; break;
+    case STATUS_EXCELLENT: target = &txtExcellent; break;
+    default: break;
+    }
+
+    if (target)
+    {
+        target->setVisible(true);
+        if (!pulseAlpha)
+        {
+            target->setAlpha(255);
+        }
+        target->invalidate();
     }
 }
 
@@ -175,8 +222,11 @@ void Screen2View::startConfirmationFlow()
     stateTimer = 0;
     Score_SetGameActive(0); // Tat phan cung trong luc hien thi OK -> Ready...
 
-    // Bam B1 se hien OK (#39FF14) tren o text
-    setStatusText("OK", touchgfx::Color::getColorFromRGB(57, 255, 20), true, false);
+    // An o text2 ("Are U Ready") khi bat dau luong xac nhan
+    setAreUReadyText(false, false);
+
+    // Bam B1 se hien txtOK ("OK")
+    showStatusText(STATUS_OK, false);
 }
 
 void Screen2View::handleTickEvent()
@@ -210,9 +260,7 @@ void Screen2View::handleTickEvent()
 
                 // Hien o text2 ("Are U Ready") co dinh ben trai voi hieu ung nhay alpha
                 setAreUReadyText(true, true);
-                // O text tam an
-                text.setVisible(false);
-                text.invalidate();
+                hideAllStatusTexts();
 
                 Score_SetGameActive(0); // Van giu phan cung ngat tin hieu
             }
@@ -234,11 +282,8 @@ void Screen2View::handleTickEvent()
             state = STATE_READY_COUNTDOWN;
             stateTimer = 0;
 
-            // Sau 0.5s OK: An o text2 ("Are U Ready")
-            setAreUReadyText(false, false);
-
-            // Hien "Ready..." mau vang #FFEE00 tren o text
-            setStatusText("Ready...", touchgfx::Color::getColorFromRGB(255, 238, 0), true, false);
+            // Sau 0.5s OK: Hien txtReady ("Ready...")
+            showStatusText(STATUS_READY, false);
         }
         break;
 
@@ -249,8 +294,8 @@ void Screen2View::handleTickEvent()
             state = STATE_GO_IDLE;
             stateTimer = 0;
 
-            // Sau 0.5s Ready: Hien "Go!" mau hong/do #FF2266 tren o text
-            setStatusText("Go!", touchgfx::Color::getColorFromRGB(255, 34, 102), true, false);
+            // Sau 0.5s Ready: Hien txtGo ("Go!")
+            showStatusText(STATUS_GO, false);
 
             // KICH HOAT NHAN TIN HIEU DAP TU PHAN CUNG!
             Score_SetGameActive(1);
@@ -315,30 +360,36 @@ void Screen2View::handleTickEvent()
 
                 // Chuyen sang STATE_RESULT_DISPLAY de hien thi thong bao danh hieu
                 state = STATE_RESULT_DISPLAY;
+                stateTimer = 0;
                 alphaVal = 255;
                 alphaDir = -4;
 
+                // An text2 ("Are U Ready?") ban dau
+                setAreUReadyText(false, false);
+
                 if (lastPercent < 40)
                 {
-                    // Bad: #FF4444 (Do)
-                    setStatusText("Bad", touchgfx::Color::getColorFromRGB(255, 68, 68), true, true);
+                    showStatusText(STATUS_BAD, true);
                 }
                 else if (lastPercent < 80)
                 {
-                    // Great!: #FFEE00 (Vang)
-                    setStatusText("Great!", touchgfx::Color::getColorFromRGB(255, 238, 0), true, true);
+                    showStatusText(STATUS_GREAT, true);
                 }
                 else
                 {
-                    // Excellent!: #39FF14 (Xanh la)
-                    setStatusText("Excellent!", touchgfx::Color::getColorFromRGB(57, 255, 20), true, true);
+                    showStatusText(STATUS_EXCELLENT, true);
                 }
             }
         }
         break;
 
     case STATE_RESULT_DISPLAY:
-        // Dang hien thi danh hieu dap luc voi hieu ung nhay alpha. Bam B1 se choi luot moi.
+        stateTimer++;
+        if (stateTimer == AREUREADY_DELAY_3S_TICKS) // Sau 3.0s = 180 ticks
+        {
+            // Hien lai "Are U Ready?" tren text2 (ben trai) nhay alpha, chu danh hieu ben phai VAN GIU NGUYEN!
+            setAreUReadyText(true, true);
+        }
         break;
 
     default:
@@ -399,19 +450,4 @@ void Screen2View::setAreUReadyText(bool visible, bool pulseAlpha)
         }
     }
     text2.invalidate();
-}
-
-void Screen2View::setStatusText(const char* str, touchgfx::colortype color, bool visible, bool pulseAlpha)
-{
-    text.setVisible(visible);
-    if (visible)
-    {
-        touchgfx::Unicode::snprintf(textBuffer, TEXT_SIZE, "%s", str);
-        text.setColor(color);
-        if (!pulseAlpha)
-        {
-            text.setAlpha(255);
-        }
-    }
-    text.invalidate();
 }

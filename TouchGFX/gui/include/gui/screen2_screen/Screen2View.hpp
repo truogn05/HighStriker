@@ -30,18 +30,31 @@ protected:
     static const uint16_t STEPS_PER_LOOP = 21;         // 1 vòng = 0->10->0 = 21 bước
     static const uint16_t TOTAL_STEPS = 42;            // 21 * 2 = 42 bước
     static const uint16_t DELAY_500MS_TICKS = 30;      // 0.5s = 30 ticks ở 60Hz
+    static const uint16_t RESULT_HOLD_TICKS = 150;     // 2.5s = 150 ticks
+    static const uint16_t AREUREADY_DELAY_3S_TICKS = 180; // 3.0s = 180 ticks phu hien are u ready
 
     enum ViewState
     {
         STATE_INTRO_ANIMATION,
-        STATE_WAIT_CONFIRM,      // Chờ bấm B1, ô areUReady hiện "Are you ready?" cyan nháy alpha
-        STATE_CONFIRMED_OK,      // Bấm B1 xong, ô text hiện "OK" green, giữ 0.5s
-        STATE_READY_COUNTDOWN,   // Sau 0.5s OK, ẩn areUReady, ô text hiện "Ready..." yellow, giữ 0.5s
-        STATE_GO_IDLE,           // Sau 0.5s Ready, ô text hiện "Go!" pink, bật nhận tín hiệu đập
+        STATE_WAIT_CONFIRM,      // Chờ bấm B1, ô text2 hiện "Are U Ready?" cyan nháy alpha
+        STATE_CONFIRMED_OK,      // Bấm B1 xong, ô txtOK hiện "OK" green, giữ 0.5s
+        STATE_READY_COUNTDOWN,   // Sau 0.5s OK, ẩn text2, ô txtReady hiện "Ready..." yellow, giữ 0.5s
+        STATE_GO_IDLE,           // Sau 0.5s Ready, ô txtGo hiện "Go!" pink, bật nhận tín hiệu đập
         STATE_RISING,
         STATE_HOLD,
         STATE_DECAY,
-        STATE_RESULT_DISPLAY     // Thanh bar hạ về 0, hiện Bad/Great/Excellent nháy alpha
+        STATE_RESULT_DISPLAY     // Thanh bar hạ về 0, hiện txtBad/txtGreat/txtExcellent nháy alpha
+    };
+
+    enum StatusTextType
+    {
+        STATUS_NONE,
+        STATUS_OK,
+        STATUS_READY,
+        STATUS_GO,
+        STATUS_BAD,
+        STATUS_GREAT,
+        STATUS_EXCELLENT
     };
 
     touchgfx::Image* emptyFrames[NUM_EMPTY_FRAMES];
@@ -49,6 +62,7 @@ protected:
     touchgfx::Unicode::UnicodeChar scoreBuffer[SCORE_BUFFER_SIZE];
 
     ViewState state;
+    StatusTextType activeStatusText;
     uint16_t  stepIndex;
     uint8_t   currentLevel;
     uint8_t   targetLevel;
@@ -61,7 +75,7 @@ protected:
     uint8_t   bgTickCounter;
     uint8_t   bgFrameIndex;
 
-    // Dem thoi gian 0.5s
+    // Dem thoi gian
     uint16_t  stateTimer;
 
     // Alpha pulsing effect (255..127)
@@ -76,7 +90,8 @@ protected:
     void updateScoreText(uint16_t percent);
     void updateHighScoreText(uint16_t highScorePercent);
     void setAreUReadyText(bool visible, bool pulseAlpha);
-    void setStatusText(const char* str, touchgfx::colortype color, bool visible, bool pulseAlpha);
+    void hideAllStatusTexts();
+    void showStatusText(StatusTextType type, bool pulseAlpha);
     void startConfirmationFlow();
 };
 

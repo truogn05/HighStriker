@@ -6,14 +6,26 @@
   <Texts>
     <TextGroup Id="Group1" />
     <TextGroup Id="Unsorted">
-      <Text Id="__SingleUse_88CE" Alignment="Left" TypographyId="custom">
-        <Translation Language="GB"></Translation>
+      <Text Id="__SingleUse_6501" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">Great!</Translation>
+      </Text>
+      <Text Id="__SingleUse_ENH3" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">Excellent!</Translation>
+      </Text>
+      <Text Id="__SingleUse_Q5XW" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB"> Bad</Translation>
+      </Text>
+      <Text Id="__SingleUse_4M05" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">Go!</Translation>
+      </Text>
+      <Text Id="__SingleUse_EZ9F" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB"> Ready...</Translation>
+      </Text>
+      <Text Id="__SingleUse_BWSU" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">OK</Translation>
       </Text>
       <Text Id="__SingleUse_T7MD" Alignment="Left" TypographyId="Typography1">
         <Translation Language="GB">Are U Ready?</Translation>
-      </Text>
-      <Text Id="__SingleUse_1JKN" Alignment="Left" TypographyId="custom">
-        <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
       <Text Id="__SingleUse_UJHL" Alignment="Left" TypographyId="Default">
         <Translation Language="GB"></Translation>
@@ -40,6 +52,6 @@
     <Typography Id="Large" Font="verdana.ttf" Size="40" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
     <Typography Id="Small" Font="verdana.ttf" Size="10" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
     <Typography Id="custom" Font="segoeprb.ttf" Size="16" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacters=" !.?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%" WildcardCharacterRanges="0-9,a-z,A-Z" />
-    <Typography Id="Typography1" Font="seguisbi.ttf" Size="14" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+    <Typography Id="Typography1" Font="segoeprb.ttf" Size="13" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacters=" !.?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%" WildcardCharacterRanges="0-9,a-z,A-Z" />
   </Typographies>
 </TextDatabase>
