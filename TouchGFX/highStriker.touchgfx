@@ -16,6 +16,7 @@
             "Name": "start2",
             "Width": 240,
             "Height": 320,
+            "Visible": false,
             "RelativeFilename": "start2.png"
           },
           {
@@ -23,6 +24,7 @@
             "Name": "start1",
             "Width": 240,
             "Height": 320,
+            "Visible": false,
             "RelativeFilename": "start1.png"
           },
           {
@@ -30,6 +32,7 @@
             "Name": "start0",
             "Width": 240,
             "Height": 320,
+            "Visible": false,
             "RelativeFilename": "start0.png"
           },
           {
@@ -50,6 +53,7 @@
             "Y": 181,
             "Width": 50,
             "Height": 17,
+            "LockPosition": true,
             "TextId": "__SingleUse_EK86",
             "TextRotation": "0",
             "Color": {
@@ -60,7 +64,7 @@
             "Wildcard1": {
               "TextId": "__SingleUse_UJHL",
               "UseBuffer": true,
-              "BufferSize": 10
+              "BufferSize": 20
             }
           }
         ],

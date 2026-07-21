@@ -20,14 +20,16 @@ void Screen1View::setupScreen()
     currentFrame = 0;
     tickCounter = 0;
 
-    // Show initial start frame
-    showFrame(currentFrame);
-
-    // Read high score ONCE when entering Screen1 and format text ONCE
+    // Read high score when entering Screen1 and update BestScore text
     ScoreDisplayData_t data;
     Score_GetDisplayData(&data);
-    touchgfx::Unicode::snprintf(BestScoreBuffer, BESTSCORE_SIZE, "%d%%", data.highScorePercent);
+
     BestScore.invalidate();
+    touchgfx::Unicode::snprintf(BestScoreBuffer, BESTSCORE_SIZE, "%d", data.highScorePercent);
+    BestScore.invalidate();
+
+    // Show initial start frame
+    showFrame(currentFrame);
 }
 
 void Screen1View::tearDownScreen()
@@ -35,9 +37,9 @@ void Screen1View::tearDownScreen()
     Screen1ViewBase::tearDownScreen();
 }
 
-void Screen1View::onScoreUpdated(const ScoreDisplayData_t& data)
+void Screen1View::onScoreUpdated(const ScoreDisplayData_t&)
 {
-    // Screen1 does not update score or process hits while active
+
 }
 
 void Screen1View::handleTickEvent()
@@ -48,22 +50,22 @@ void Screen1View::handleTickEvent()
     if (tickCounter >= TICKS_PER_FRAME)
     {
         tickCounter = 0;
-        currentFrame = (currentFrame + 1) % NUM_START_FRAMES;
+        currentFrame = (currentFrame + 1) % NUM_START_FRAMES; // Cycle 0 -> 1 -> 2 -> 3 -> 0
         showFrame(currentFrame);
     }
 }
 
 void Screen1View::showFrame(uint8_t index)
 {
-    // Step 1: Set visibility for ALL frames first (no invalidate yet)
+    if (index >= NUM_START_FRAMES)
+    {
+        return;
+    }
+
     for (uint8_t i = 0; i < NUM_START_FRAMES; i++)
     {
         bool isCurrent = (i == index);
         startFrames[i]->setVisible(isCurrent);
+        startFrames[i]->invalidate();
     }
-
-    // Step 2: Invalidate ONCE on the newly visible frame only.
-    // This prevents a two-pass repaint (hide old -> black flash -> draw new)
-    // by letting TouchGFX redraw the region in a single render pass.
-    startFrames[index]->invalidate();
 }

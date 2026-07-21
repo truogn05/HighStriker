@@ -44,6 +44,7 @@ protected:
     uint16_t  lastPercent;
     uint16_t  holdCounter;
     uint8_t   tickCounter;
+    uint16_t  currentHighScore;
 
     void showFrame(uint8_t index);
     uint8_t frameForStep(uint16_t step) const;

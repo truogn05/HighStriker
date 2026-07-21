@@ -115,7 +115,10 @@ uint16_t Force_To_Percent(int32_t peak_force)
 
     // Calculate exact percentage
     uint32_t percent = ((uint32_t)peak_force * 100) / FORCE_MAX_THRESHOLD;
-    return (uint16_t)percent;
+    if (percent <= 30) {
+        return 0;
+    }
+    return (uint16_t)(percent - 30);
 }
 
 uint8_t Percent_To_Level(uint16_t percent)

@@ -971,6 +971,13 @@ void LCD_Delay(uint32_t Delay)
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
+  // Check if hardware reset was triggered by NRST pin (Black button B2 on STM32F429 DISCO)
+  if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST) && !__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST)) {
+    // Reset entire game: HighScore in Flash set to 0
+    Flash_SaveHighScore(0);
+  }
+  __HAL_RCC_CLEAR_RESET_FLAGS();
+
   uint16_t savedHighScore = Flash_ReadHighScore();
   Score_Init(savedHighScore);
 
@@ -983,31 +990,26 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    // ONLY process loadcell force measurements when game is active on Screen2 (STATE_IDLE)
-    if (Score_IsGameActive()) {
+    // ONLY process loadcell force measurements when game is active on Screen2 AND ready for hit
+    if (Score_IsGameActive() && Score_IsReadyForHit()) {
       if (LoadCell_Process(&g_loadCell, &peakForce)) {
         uint16_t percent = Force_To_Percent(peakForce);
         uint8_t  level   = Percent_To_Level(percent);
 
         Score_SetNewHit(level, percent);
-
-        // Check and update persistent High Score in Flash
-        if (percent > savedHighScore) {
-          savedHighScore = percent;
-          Flash_SaveHighScore(savedHighScore);
-        }
       }
     } else {
-      // Reset loadcell measuring state when on Screen1 or during Screen2 Intro
+      // Reset loadcell measuring state when on Screen1, during Screen2 Intro, or waiting for B1
       g_loadCell.is_measuring = 0;
     }
 
-    // Check Blue USER Button (PA0) on STM32F429I-DISCO for High Score Reset
+    // Check Blue USER Button (B1 / PA0) on STM32F429I-DISCO to start a new turn ready
     if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
       osDelay(50); // Debounce delay
       if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
-        savedHighScore = 0;
-        Score_ResetHighScore();
+        Score_RequestNewTurn();
+        g_loadCell.is_measuring = 0;
+        g_loadCell.last_hit_time = 0;
         while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
           osDelay(10); // Wait until released
         }

@@ -3,7 +3,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-static volatile ScoreDisplayData_t g_scoreDisplay = {0, 0, 0, 0, 0};
+static volatile ScoreDisplayData_t g_scoreDisplay = {0, 0, 0, 0, 0, 0, 1};
 
 void Score_Init(uint16_t initialHighScore)
 {
@@ -12,6 +12,8 @@ void Score_Init(uint16_t initialHighScore)
     g_scoreDisplay.isNewPeak = 0;
     g_scoreDisplay.highScorePercent = initialHighScore;
     g_scoreDisplay.isGameActive = 0;
+    g_scoreDisplay.resetScoreRequested = 0;
+    g_scoreDisplay.isReadyForHit = 1;
 }
 
 void Score_GetDisplayData(ScoreDisplayData_t *outData)
@@ -24,6 +26,8 @@ void Score_GetDisplayData(ScoreDisplayData_t *outData)
     outData->isNewPeak = g_scoreDisplay.isNewPeak;
     outData->highScorePercent = g_scoreDisplay.highScorePercent;
     outData->isGameActive = g_scoreDisplay.isGameActive;
+    outData->resetScoreRequested = g_scoreDisplay.resetScoreRequested;
+    outData->isReadyForHit = g_scoreDisplay.isReadyForHit;
     taskEXIT_CRITICAL();
 }
 
@@ -33,10 +37,7 @@ void Score_SetNewHit(uint8_t level, uint16_t percent)
     g_scoreDisplay.level = level;
     g_scoreDisplay.percent = percent;
     g_scoreDisplay.isNewPeak = 1;
-
-    if (percent > g_scoreDisplay.highScorePercent) {
-        g_scoreDisplay.highScorePercent = percent;
-    }
+    g_scoreDisplay.isReadyForHit = 0; // Lock out further hits until B1 pressed
     taskEXIT_CRITICAL();
 }
 
@@ -78,4 +79,45 @@ uint16_t Score_GetHighScore(void)
     hs = g_scoreDisplay.highScorePercent;
     taskEXIT_CRITICAL();
     return hs;
+}
+
+void Score_UpdateHighScore(uint16_t newHighScore)
+{
+    taskENTER_CRITICAL();
+    g_scoreDisplay.highScorePercent = newHighScore;
+    taskEXIT_CRITICAL();
+    Flash_SaveHighScore(newHighScore);
+}
+
+void Score_RequestNewTurn(void)
+{
+    taskENTER_CRITICAL();
+    g_scoreDisplay.level = 0;
+    g_scoreDisplay.percent = 0;
+    g_scoreDisplay.resetScoreRequested = 1;
+    g_scoreDisplay.isReadyForHit = 1; // Arm system for next hit
+    taskEXIT_CRITICAL();
+}
+
+void Score_ClearResetScoreFlag(void)
+{
+    taskENTER_CRITICAL();
+    g_scoreDisplay.resetScoreRequested = 0;
+    taskEXIT_CRITICAL();
+}
+
+uint8_t Score_IsReadyForHit(void)
+{
+    uint8_t ready;
+    taskENTER_CRITICAL();
+    ready = g_scoreDisplay.isReadyForHit;
+    taskEXIT_CRITICAL();
+    return ready;
+}
+
+void Score_SetReadyForHit(uint8_t ready)
+{
+    taskENTER_CRITICAL();
+    g_scoreDisplay.isReadyForHit = ready;
+    taskEXIT_CRITICAL();
 }

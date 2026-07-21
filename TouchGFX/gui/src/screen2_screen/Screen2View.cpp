@@ -1,7 +1,7 @@
 #include <gui/screen2_screen/Screen2View.hpp>
 
 Screen2View::Screen2View()
-    : state(STATE_INTRO_ANIMATION), stepIndex(0), currentLevel(0), targetLevel(0), lastPercent(0), holdCounter(0), tickCounter(0)
+    : state(STATE_INTRO_ANIMATION), stepIndex(0), currentLevel(0), targetLevel(0), lastPercent(0), holdCounter(0), tickCounter(0), currentHighScore(0)
 {
     gameFrames[0]  = &game0;
     gameFrames[1]  = &game1;
@@ -38,7 +38,8 @@ void Screen2View::setupScreen()
 
     ScoreDisplayData_t data;
     Score_GetDisplayData(&data);
-    updateHighScoreText(data.highScorePercent);
+    currentHighScore = data.highScorePercent;
+    updateHighScoreText(currentHighScore);
 }
 
 void Screen2View::tearDownScreen()
@@ -50,7 +51,19 @@ void Screen2View::tearDownScreen()
 
 void Screen2View::onScoreUpdated(const ScoreDisplayData_t& data)
 {
-    updateHighScoreText(data.highScorePercent);
+    // Xử lý yêu cầu reset điểm hiện tại về 0 khi nhấn nút xanh (B1)
+    if (data.resetScoreRequested)
+    {
+        updateScoreText(0);
+        Score_ClearResetScoreFlag();
+    }
+
+    // Cập nhật điểm kỷ lục khi có thay đổi (ví dụ khi reset kỷ lục từ nút đen B2)
+    if (data.highScorePercent != currentHighScore)
+    {
+        currentHighScore = data.highScorePercent;
+        updateHighScoreText(currentHighScore);
+    }
 
     // CHỈ cho phép nhận lực đập từ phần cứng khi đã ở trạng thái STATE_IDLE (đã chạy xong Intro)
     if (data.isNewPeak && state == STATE_IDLE)
@@ -62,6 +75,7 @@ void Screen2View::onScoreUpdated(const ScoreDisplayData_t& data)
         tickCounter = 0;
         showFrame(0);
         updateScoreText(0);
+        Score_ClearNewPeakFlag();
     }
 }
 
@@ -146,7 +160,15 @@ void Screen2View::handleTickEvent()
             else
             {
                 state = STATE_IDLE;
-                updateScoreText(0);
+                // Không reset điểm hiện tại về 0 nữa, giữ điểm hiện tại ở mức Peak (lastPercent)!
+
+                // Thanh bar đã hạ về 0 và animation hoàn tất! Mới cập nhật HighScore nếu có kỷ lục mới.
+                if (lastPercent > currentHighScore)
+                {
+                    currentHighScore = lastPercent;
+                    updateHighScoreText(currentHighScore);
+                    Score_UpdateHighScore(currentHighScore);
+                }
             }
         }
         break;
@@ -179,13 +201,13 @@ void Screen2View::showFrame(uint8_t index)
 void Screen2View::updateScoreText(uint16_t percent)
 {
     Score.invalidate(); // Invalidate old area
-    touchgfx::Unicode::snprintf(scoreBuffer, SCORE_BUFFER_SIZE, "%d%%", percent);
+    touchgfx::Unicode::snprintf(scoreBuffer, SCORE_BUFFER_SIZE, "%d", percent);
     Score.invalidate(); // Keep fixed width & alignment intact (do not call resizeToCurrentText)
 }
 
 void Screen2View::updateHighScoreText(uint16_t highScorePercent)
 {
     HighScore.invalidate(); // Invalidate old area
-    touchgfx::Unicode::snprintf(HighScoreBuffer, HIGHSCORE_SIZE, "%d%%", highScorePercent);
+    touchgfx::Unicode::snprintf(HighScoreBuffer, HIGHSCORE_SIZE, "%d", highScorePercent);
     HighScore.invalidate(); // Keep fixed width & alignment intact (do not call resizeToCurrentText)
 }

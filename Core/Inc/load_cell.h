@@ -9,7 +9,7 @@ extern "C" {
 
 // Thresholds for High Striker hit detection
 #ifndef FORCE_TRIGGER_THRESHOLD
-#define FORCE_TRIGGER_THRESHOLD   5000    // Minimum force units to trigger a hit
+#define FORCE_TRIGGER_THRESHOLD   75000   // Minimum force units to trigger a hit (30 points)
 #endif
 
 #ifndef IMPULSE_MIN_DELTA
