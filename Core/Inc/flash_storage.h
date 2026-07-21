@@ -7,9 +7,9 @@ extern "C" {
 
 #include "stm32f4xx_hal.h"
 
-// STM32F429 Flash Sector 11 (Address Range: 0x080E0000 - 0x080FFFFF)
-#define FLASH_HIGHSCORE_SECTOR      FLASH_SECTOR_11
-#define FLASH_HIGHSCORE_ADDRESS     0x080E0000
+// STM32F429 Flash Sector 23 (Address Range: 0x081E0000 - 0x081FFFFF)
+#define FLASH_HIGHSCORE_SECTOR      FLASH_SECTOR_23
+#define FLASH_HIGHSCORE_ADDRESS     0x081E0000
 #define FLASH_MAGIC_KEY             0x55AA1234
 
 /**
