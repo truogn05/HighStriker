@@ -70,6 +70,7 @@ protected:
     uint16_t  holdCounter;
     uint8_t   tickCounter;
     uint16_t  currentHighScore;
+    bool      isHighScorePulsing;
 
     // Hiệu ứng nền empty0-3 (3 FPS)
     uint8_t   bgTickCounter;

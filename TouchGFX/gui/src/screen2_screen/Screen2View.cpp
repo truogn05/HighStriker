@@ -17,7 +17,8 @@ Screen2View::Screen2View()
       bgFrameIndex(0),
       stateTimer(0),
       alphaVal(255),
-      alphaDir(-4)
+      alphaDir(-4),
+      isHighScorePulsing(false)
 {
     emptyFrames[0] = &empty0;
     emptyFrames[1] = &empty1;
@@ -40,6 +41,10 @@ Screen2View::Screen2View()
 void Screen2View::setupScreen()
 {
     Screen2ViewBase::setupScreen();
+
+    isHighScorePulsing = false;
+    HighScore.setAlpha(255);
+    HighScore.invalidate();
 
     // Dam bao tat ca bitmap cho 4 hinh nen duoc khoi tao dung
     empty0.setBitmap(touchgfx::Bitmap(BITMAP_EMPTY0_ID));
@@ -154,6 +159,13 @@ void Screen2View::updateAlphaPulse()
     }
     alphaVal = static_cast<uint8_t>(nextAlpha);
 
+    // Bat nhay Alpha cho HighScore neu vua dat ky luc moi
+    if (isHighScorePulsing)
+    {
+        HighScore.setAlpha(alphaVal);
+        HighScore.invalidate();
+    }
+
     // Bat nhay Alpha cho o text2 ("Are U Ready") khi text2 hien thi
     if (text2.isVisible())
     {
@@ -221,6 +233,14 @@ void Screen2View::startConfirmationFlow()
     state = STATE_CONFIRMED_OK;
     stateTimer = 0;
     Score_SetGameActive(0); // Tat phan cung trong luc hien thi OK -> Ready...
+
+    // Tat nhay alpha HighScore va khoi phục alpha 255 cho HighScore khi nguoi choi bam B1
+    if (isHighScorePulsing)
+    {
+        isHighScorePulsing = false;
+        HighScore.setAlpha(255);
+        HighScore.invalidate();
+    }
 
     // An o text2 ("Are U Ready") khi bat dau luong xac nhan
     setAreUReadyText(false, false);
@@ -356,6 +376,7 @@ void Screen2View::handleTickEvent()
                     currentHighScore = lastPercent;
                     updateHighScoreText(currentHighScore);
                     Score_UpdateHighScore(currentHighScore);
+                    isHighScorePulsing = true; // Bat nhay Alpha HighScore vi vua lap ky luc moi!
                 }
 
                 // Chuyen sang STATE_RESULT_DISPLAY de hien thi thong bao danh hieu
