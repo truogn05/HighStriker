@@ -971,15 +971,7 @@ void LCD_Delay(uint32_t Delay)
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
-  // Check if hardware reset was triggered by NRST pin (Black button B2 on STM32F429 DISCO)
-  if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST) && !__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST)) {
-    // Reset entire game: HighScore in Flash set to 0
-    Flash_SaveHighScore(0);
-  }
-  __HAL_RCC_CLEAR_RESET_FLAGS();
-
-  uint16_t savedHighScore = Flash_ReadHighScore();
-  Score_Init(savedHighScore);
+  Score_Init(0); // Initialize High Score to 0% in shared RAM
 
   // Initialize HX711 on PD12 (SCK) and PB12 (DOUT)
   LoadCell_Init(&g_loadCell, GPIOD, GPIO_PIN_12, GPIOB, GPIO_PIN_12);

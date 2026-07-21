@@ -62,7 +62,6 @@ void Score_ResetHighScore(void)
     taskENTER_CRITICAL();
     g_scoreDisplay.highScorePercent = 0;
     taskEXIT_CRITICAL();
-    Flash_SaveHighScore(0);
 }
 
 void Score_ClearNewPeakFlag(void)
@@ -86,7 +85,6 @@ void Score_UpdateHighScore(uint16_t newHighScore)
     taskENTER_CRITICAL();
     g_scoreDisplay.highScorePercent = newHighScore;
     taskEXIT_CRITICAL();
-    Flash_SaveHighScore(newHighScore);
 }
 
 void Score_RequestNewTurn(void)
