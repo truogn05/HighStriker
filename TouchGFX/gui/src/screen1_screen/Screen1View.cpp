@@ -1,4 +1,6 @@
 #include <gui/screen1_screen/Screen1View.hpp>
+#include <touchgfx/Color.hpp>
+#include <images/BitmapDatabase.hpp>
 
 Screen1View::Screen1View()
     : currentFrame(0), tickCounter(0)

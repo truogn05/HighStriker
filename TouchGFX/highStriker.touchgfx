@@ -89,86 +89,136 @@
         "Components": [
           {
             "Type": "Image",
-            "Name": "game10",
+            "Name": "empty3",
             "Width": 240,
             "Height": 320,
+            "RelativeFilename": "empty3.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "empty2",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "empty2.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "empty1",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "empty1.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "empty0",
+            "Width": 240,
+            "Height": 320,
+            "RelativeFilename": "empty0.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game10",
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game10.png"
           },
           {
             "Type": "Image",
             "Name": "game9",
-            "Width": 240,
-            "Height": 320,
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game9.png"
           },
           {
             "Type": "Image",
             "Name": "game8",
-            "Width": 240,
-            "Height": 320,
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game8.png"
           },
           {
             "Type": "Image",
             "Name": "game7",
-            "Width": 240,
-            "Height": 320,
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game7.png"
           },
           {
             "Type": "Image",
             "Name": "game6",
-            "Width": 240,
-            "Height": 320,
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game6.png"
           },
           {
             "Type": "Image",
             "Name": "game5",
-            "Width": 240,
-            "Height": 320,
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game5.png"
           },
           {
             "Type": "Image",
             "Name": "game4",
-            "Width": 240,
-            "Height": 320,
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game4.png"
           },
           {
             "Type": "Image",
             "Name": "game3",
-            "Width": 240,
-            "Height": 320,
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game3.png"
           },
           {
             "Type": "Image",
             "Name": "game2",
-            "Width": 240,
-            "Height": 320,
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game2.png"
           },
           {
             "Type": "Image",
             "Name": "game1",
-            "Width": 240,
-            "Height": 320,
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game1.png"
           },
           {
             "Type": "Image",
             "Name": "game0",
-            "Width": 240,
-            "Height": 320,
+            "X": 95,
+            "Y": 78,
+            "Width": 54,
+            "Height": 170,
             "RelativeFilename": "game0.png"
           },
           {
             "Type": "Button",
             "Name": "button1",
-            "X": 7,
-            "Y": 277,
+            "X": 5,
+            "Y": 276,
             "Width": 30,
             "Height": 29,
             "Pressed": "Blue_Icons_Home_32.png",
@@ -177,8 +227,8 @@
           {
             "Type": "TextArea",
             "Name": "Score",
-            "X": 38,
-            "Y": 172,
+            "X": 33,
+            "Y": 167,
             "Width": 50,
             "Height": 17,
             "TextId": "__SingleUse_KDJY",
@@ -195,8 +245,8 @@
           {
             "Type": "TextArea",
             "Name": "HighScore",
-            "X": 165,
-            "Y": 172,
+            "X": 161,
+            "Y": 167,
             "Width": 55,
             "Height": 17,
             "TextId": "__SingleUse_RGYX",
@@ -211,6 +261,38 @@
               "UseBuffer": true,
               "BufferSize": 10
             }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text",
+            "X": 150,
+            "Y": 78,
+            "Width": 76,
+            "Height": 22,
+            "TextId": "__SingleUse_1JKN",
+            "TextRotation": "0",
+            "AutoSize": true,
+            "Wildcard1": {
+              "TextId": "__SingleUse_88CE",
+              "UseBuffer": true,
+              "BufferSize": 20
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text2",
+            "X": 5,
+            "Y": 81,
+            "Width": 84,
+            "Height": 17,
+            "Visible": false,
+            "TextId": "__SingleUse_T7MD",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 144
+            },
+            "AutoSize": true
           }
         ],
         "Interactions": [
@@ -230,7 +312,16 @@
         ]
       }
     ],
-    "CustomContainerDefinitions": [],
+    "CustomContainerDefinitions": [
+      {
+        "Name": "CustomContainer1",
+        "Y": 45,
+        "Width": 250,
+        "Height": 250,
+        "Components": [],
+        "Interactions": []
+      }
+    ],
     "Name": "highStriker",
     "Resolution": {
       "Width": 240,

@@ -3,6 +3,8 @@
 
 #include <gui_generated/screen2_screen/Screen2ViewBase.hpp>
 #include <gui/screen2_screen/Screen2Presenter.hpp>
+#include <touchgfx/Color.hpp>
+#include <images/BitmapDatabase.hpp>
 #include "score_interface.h"
 
 class Screen2View : public Screen2ViewBase
@@ -17,23 +19,32 @@ public:
     void onScoreUpdated(const ScoreDisplayData_t& data);
 
 protected:
-    static const uint8_t  NUM_GAME_FRAMES = 11;       // game0..game10
+    static const uint8_t  NUM_EMPTY_FRAMES = 4;        // empty0..empty3 (nền)
+    static const uint8_t  TICKS_PER_BG_FRAME = 20;     // 3 fps (60 ticks / 3 = 20 ticks)
+
+    static const uint8_t  NUM_GAME_FRAMES = 11;        // game0..game10 (thanh bar)
     static const uint8_t  SCORE_BUFFER_SIZE = 10;
-    static const uint8_t  TICKS_PER_STEP = 3;         // Tốc độ nảy dâng cột: ~20 fps
-    static const uint8_t  TICKS_PER_INTRO_FRAME = 6;  // Tốc độ intro: ~10 fps
-    static const uint8_t  NUM_REPEATS = 2;            // Intro lặp 2 lần
-    static const uint16_t STEPS_PER_LOOP = 21;        // 1 vòng = 0->10->0 = 21 bước
-    static const uint16_t TOTAL_STEPS = 42;           // 21 * 2 = 42 bước
+    static const uint8_t  TICKS_PER_STEP = 3;          // Tốc độ nảy dâng cột: ~20 fps
+    static const uint8_t  TICKS_PER_INTRO_FRAME = 6;   // Tốc độ intro: ~10 fps
+    static const uint8_t  NUM_REPEATS = 2;             // Intro lặp 2 lần
+    static const uint16_t STEPS_PER_LOOP = 21;         // 1 vòng = 0->10->0 = 21 bước
+    static const uint16_t TOTAL_STEPS = 42;            // 21 * 2 = 42 bước
+    static const uint16_t DELAY_500MS_TICKS = 30;      // 0.5s = 30 ticks ở 60Hz
 
     enum ViewState
     {
         STATE_INTRO_ANIMATION,
-        STATE_IDLE,
+        STATE_WAIT_CONFIRM,      // Chờ bấm B1, ô areUReady hiện "Are you ready?" cyan nháy alpha
+        STATE_CONFIRMED_OK,      // Bấm B1 xong, ô text hiện "OK" green, giữ 0.5s
+        STATE_READY_COUNTDOWN,   // Sau 0.5s OK, ẩn areUReady, ô text hiện "Ready..." yellow, giữ 0.5s
+        STATE_GO_IDLE,           // Sau 0.5s Ready, ô text hiện "Go!" pink, bật nhận tín hiệu đập
         STATE_RISING,
         STATE_HOLD,
-        STATE_DECAY
+        STATE_DECAY,
+        STATE_RESULT_DISPLAY     // Thanh bar hạ về 0, hiện Bad/Great/Excellent nháy alpha
     };
 
+    touchgfx::Image* emptyFrames[NUM_EMPTY_FRAMES];
     touchgfx::Image* gameFrames[NUM_GAME_FRAMES];
     touchgfx::Unicode::UnicodeChar scoreBuffer[SCORE_BUFFER_SIZE];
 
@@ -46,10 +57,27 @@ protected:
     uint8_t   tickCounter;
     uint16_t  currentHighScore;
 
-    void showFrame(uint8_t index);
+    // Hiệu ứng nền empty0-3 (3 FPS)
+    uint8_t   bgTickCounter;
+    uint8_t   bgFrameIndex;
+
+    // Dem thoi gian 0.5s
+    uint16_t  stateTimer;
+
+    // Alpha pulsing effect (255..127)
+    uint8_t   alphaVal;
+    int8_t    alphaDir;
+
+    void updateBackgroundAnimation();
+    void updateAlphaPulse();
+    void showEmptyFrame(uint8_t index);
+    void showGameFrame(uint8_t index);
     uint8_t frameForStep(uint16_t step) const;
     void updateScoreText(uint16_t percent);
     void updateHighScoreText(uint16_t highScorePercent);
+    void setAreUReadyText(bool visible, bool pulseAlpha);
+    void setStatusText(const char* str, touchgfx::colortype color, bool visible, bool pulseAlpha);
+    void startConfirmationFlow();
 };
 
 #endif // SCREEN2VIEW_HPP
