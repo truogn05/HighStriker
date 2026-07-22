@@ -38,11 +38,11 @@
 
 # Sơ đồ schematic
 
-![Sơ đồ schematic](schematic.png)
+![Sơ đồ schematic](schematic.jpg)
 
 # Hình ảnh thực tế
 
-![Hình ảnh thực tế](demo.png)
+![Hình ảnh thực tế](demo.jpg)
 
 # Đặc tả hàm
 
