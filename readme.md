@@ -2,11 +2,11 @@
 
 - Báo cáo bài tập lớn Hệ nhúng - IT4210
 - Mã lớp: 168504
-- Ten nhom: nà ná na na
+- Tên nhóm: nà ná na na
 
 # Mô tả đề tài
 
-- Xây dựng phần cứng và phần mềm mô phỏng trò chơi High Striker. Hệ thống sẽ đo lực tác động của người chơi lên cảm biến, sau đó hiển thị lên màn hình đồ họa trên kit STM32F429ZIT6. Ngòai ra hệ thống còn ghi nhận lại điểm cao nhất của người chơi (Highest Score).
+- Xây dựng phần cứng và phần mềm mô phỏng trò chơi High Striker. Hệ thống sẽ đo lực tác động của người chơi lên cảm biến, sau đó hiển thị lên màn hình đồ họa trên kit STM32F429ZIT6. Ngoài ra hệ thống còn ghi nhận lại điểm cao nhất của người chơi (Highest Score).
 - Các tính năng:
   - Hiển thị điểm hiện tại của người chơi
   - Lưu trữ và hiển thị điểm cao nhất
@@ -37,6 +37,12 @@
 - Firmware C/C++: xử lý giá trị đọc từ HX711, tính toán điểm và hiển thị lên màn hình
 
 # Sơ đồ schematic
+
+![Sơ đồ schematic](schematic.png)
+
+# Hình ảnh thực tế
+
+![Hình ảnh thực tế](demo.png)
 
 # Đặc tả hàm
 
