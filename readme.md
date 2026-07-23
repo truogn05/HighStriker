@@ -88,12 +88,6 @@
 
 ![Hình ảnh thực tế](demo.jpg)
 
-# Demo
-
-<video src="demo.mp4" controls width="100%" poster="demo.jpg">
-  Trình duyệt hoặc trình xem Markdown của bạn không hỗ trợ thẻ video HTML5. Bạn có thể mở trực tiếp file <code>demo.mp4</code>.
-</video>
-
 # Đặc tả hàm
 
 ## [main.c](./Core/Src/main.c)
