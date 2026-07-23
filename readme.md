@@ -4,6 +4,26 @@
 - Mã lớp: 168504
 - Tên nhóm: nà ná na na
 
+---
+
+## Mục lục
+
+- [Mô tả đề tài](#mô-tả-đề-tài)
+- [Nhóm thực hiện](#nhóm-thực-hiện)
+- [Phần cứng sử dụng](#phần-cứng-sử-dụng)
+- [Phần mềm thực thi](#phần-mềm-thực-thi)
+- [Sơ đồ schematic](#sơ-đồ-schematic)
+- [Hình ảnh thực tế](#hình-ảnh-thực-tế)
+- [Demo](#demo)
+- [Đặc tả hàm](#đặc-tả-hàm)
+  - [main.c](./Core/Src/main.c)
+  - [score_interface.c](./Core/Src/score_interface.c)
+  - [flash_storage.c](./Core/Src/flash_storage.c)
+  - [hx711.c](./Core/Src/hx711.c)
+  - [load_cell.c](./Core/Src/load_cell.c)
+
+---
+
 # Mô tả đề tài
 
 - Xây dựng phần cứng và phần mềm mô phỏng trò chơi High Striker. Hệ thống sẽ đo lực tác động của người chơi lên cảm biến, sau đó hiển thị lên màn hình đồ họa trên kit STM32F429ZIT6. Ngoài ra hệ thống còn ghi nhận lại điểm cao nhất của người chơi (Highest Score).
@@ -15,34 +35,64 @@
 
 # Nhóm thực hiện
 
-| STT | Họ tên            | MSSV     | Công việc                             |
-| --- | ----------------- | -------- | ------------------------------------- |
-| 1   | Vũ Tiến Chiến     | 20235279 | Xử lý logic tổng thể (hàm main)       |
-| 2   | Nguyễn Hữu Trường | 20235447 | Cấu hình và xử lý giao tiếp phần cứng |
-| 3   | Vũ Hữu Dương      | 20235314 | Xử lý lưu trữ các điểm số             |
-| 4   | Trần Danh Chính   | 20235280 | Thiết kế giao diện và xử lý hiển thị  |
-| 5   | Nguyễn Phúc Sơn   | 20235417 | Thiết kế giao diện và xử lý hiển thị  |
+| STT | Họ tên | MSSV | Công việc |
+| --- | --- | --- | --- |
+| 1 | Vũ Tiến Chiến | 20235279 | Xử lý logic tổng thể (hàm main) |
+| 2 | Nguyễn Hữu Trường | 20235447 | Cấu hình và xử lý giao tiếp phần cứng |
+| 3 | Vũ Hữu Dương | 20235314 | Xử lý lưu trữ các điểm số |
+| 4 | Trần Danh Chính | 20235280 | Thiết kế giao diện và xử lý hiển thị |
+| 5 | Nguyễn Phúc Sơn | 20235417 | Thiết kế giao diện và xử lý hiển thị |
 
 # Phần cứng sử dụng
 
-- STM32F429ZIT6: bo mạch điều khiển chính, xử lý logic, giao tiếp phần cứng
-- HX711: khuếch đại tín hiệu từ loadcell, chuyển sang tín hiệu số gửi vào vi điều khiển
-- Loadcell: cảm biến lực khi có tác động
-- Dây nối: Kết nối giữa các thiết bị
+| Tên thiết bị / Linh kiện | Mô tả & Chức năng |
+| :--- | :--- |
+| **STM32F429ZIT6** | Bo mạch điều khiển chính, xử lý logic, giao tiếp phần cứng |
+| **HX711** | Khuếch đại tín hiệu từ loadcell, chuyển sang tín hiệu số gửi vào vi điều khiển |
+| **Loadcell** | Cảm biến lực khi có tác động |
+| **Dây nối** | Kết nối giữa các thiết bị |
 
 # Phần mềm thực thi
 
-- STM32CubeIDE: viết và quản lý code, hỗ trợ build, debug, nạp code vào MCU
-- TouchGFX: Thiết kế giao diện, hiệu ứng, hiển thị điểm, gen code tự động
-- Firmware C/C++: xử lý giá trị đọc từ HX711, tính toán điểm và hiển thị lên màn hình
+| Công cụ / Phần mềm | Mô tả & Chức năng |
+| :--- | :--- |
+| **STM32CubeIDE** | Viết và quản lý code, hỗ trợ build, debug, nạp code vào MCU |
+| **TouchGFX** | Thiết kế giao diện, hiệu ứng, hiển thị điểm, gen code tự động |
+| **Firmware C/C++** | Xử lý giá trị đọc từ HX711, tính toán điểm và hiển thị lên màn hình |
 
 # Sơ đồ schematic
 
 ![Sơ đồ schematic](schematic.jpg)
 
+### Bảng mô tả chi tiết ghép nối phần cứng
+
+#### 1. Ghép nối giữa Module HX711 và STM32F429ZIT6
+
+| Chân HX711 | Chân STM32F429 | Tín hiệu / Chức năng |
+| :--- | :--- | :--- |
+| **GND** | GND  | Nguồn đất chung |
+| **Serial Data (DOUT)** | PB12  | Tín hiệu dữ liệu số (Data Out) |
+| **Serial Clock (SCK)** | PD12  | Tín hiệu xung clock điều khiển (Clock Input) |
+| **VCC (+5V)** | 5V / 5V1  | Nguồn cấp điện áp +5V cho HX711 |
+
+#### 2. Ghép nối giữa Cảm biến Loadcell và Module HX711
+
+| Màu dây Loadcell | Chân trên Module HX711 | Chức năng tín hiệu |
+| :--- | :--- | :--- |
+| **Đỏ** | E+ | Điện áp kích thích cực dương (Excitation +) |
+| **Đen** | E- | Điện áp kích thích cực âm (Excitation -) |
+| **Trắng** | A- | Tín hiệu vi sai kênh A âm (Signal A-) |
+| **Xanh lá** | A+ | Tín hiệu vi sai kênh A dương (Signal A+) |
+
 # Hình ảnh thực tế
 
 ![Hình ảnh thực tế](demo.jpg)
+
+# Demo
+
+<video src="demo.mp4" controls width="100%" poster="demo.jpg">
+  Trình duyệt hoặc trình xem Markdown của bạn không hỗ trợ thẻ video HTML5. Bạn có thể mở trực tiếp file <code>demo.mp4</code>.
+</video>
 
 # Đặc tả hàm
 
@@ -77,7 +127,7 @@
 - `Score_ClearNewPeakFlag()`: Xóa cờ `isNewPeak` sau khi giao diện đồ họa (GUI) đã xử lý xong hiệu ứng hiển thị.
 - `Score_GetHighScore()`: Đọc giá trị điểm kỷ lục hiện tại đang lưu trong bộ nhớ RAM.
 - `Score_UpdateHighScore(newHighScore)`: Cập nhật giá trị điểm kỷ lục mới vào bộ nhớ RAM và ghi lưu vĩnh viễn xuống bộ nhớ Flash.
-- `Score_RequestNewTurn()`: Cặt lại (Reset) điểm số lượt chơi hiện tại, bật cờ yêu cầu lượt chơi mới và sẵn sàng nhận cú đập tiếp theo.
+- `Score_RequestNewTurn()`: Đặt lại (Reset) điểm số lượt chơi hiện tại, bật cờ yêu cầu lượt chơi mới và sẵn sàng nhận cú đập tiếp theo.
 - `Score_ClearResetScoreFlag()`: Xóa cờ yêu cầu đặt lại điểm sau khi giao diện GUI đã xử lý xong.
 - `Score_IsReadyForHit()`: Trả về trạng thái cho biết hệ thống đã sẵn sàng nhận cú đập mới hay chưa.
 - `Score_SetReadyForHit(ready)`: Bật/tắt trạng thái sẵn sàng nhận tín hiệu đập búa từ cảm biến lực.
