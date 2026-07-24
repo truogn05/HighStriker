@@ -88,6 +88,12 @@
 
 ![Hình ảnh thực tế](demo.jpg)
 
+# Demo
+
+[![Demo Video](img.jpg)](https://youtu.be/8hcF2H7xNDo?si=7lLD2vZ9nViBRDeb)
+
+*▶️ **[Bấm vào ảnh hoặc nhấn vào đây để xem Video](https://youtu.be/8hcF2H7xNDo?si=7lLD2vZ9nViBRDeb)***
+
 # Đặc tả hàm
 
 ## [main.c](./Core/Src/main.c)
